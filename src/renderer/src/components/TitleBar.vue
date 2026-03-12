@@ -32,7 +32,7 @@ onMounted(() => {
   <div class="title-bar">
     <div class="drag-region"></div>
     <div class="left-controls">
-      <ThemeSwitch @update:theme="handleThemeChange" />
+      <!-- 移除 ThemeSwitch，现在只在设置页面切换 -->
     </div>
     <div class="title">天工开物</div>
     <div class="controls">
@@ -72,6 +72,13 @@ onMounted(() => {
   font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
   font-size: 12px;
   border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.3s ease; /* 添加过渡效果 */
+}
+
+/* 适配毛玻璃主题 */
+:global(.glass-theme) .title-bar {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
 }
 
 .drag-region {

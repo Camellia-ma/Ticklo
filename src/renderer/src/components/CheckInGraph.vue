@@ -142,6 +142,7 @@ const nextMonth = () => {
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   font-size: 12px;
+  font-weight: 700; /* 加粗星期 */
   color: var(--ev-c-text-2);
   margin-bottom: 8px;
 }
@@ -149,7 +150,9 @@ const nextMonth = () => {
 .days-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px; /* 减小间距 */
+  gap: 8px; /* 增大间距适应更宽布局 */
+  height: 100%;
+  align-content: center;
 }
 
 .day-cell {
@@ -157,11 +160,14 @@ const nextMonth = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 14px; /* 稍微调大字体 */
+  font-weight: 600; /* 加粗字体 */
   border-radius: 50%;
   cursor: default;
   color: var(--color-text);
   transition: all 0.2s;
+  max-width: 40px; /* 限制最大尺寸防止过大 */
+  margin: 0 auto; /* 居中 */
 }
 
 .day-cell.prev,

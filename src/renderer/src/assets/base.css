@@ -26,13 +26,26 @@
   --color-border: rgba(255, 255, 255, 0.1);
 }
 
+:root.glass-theme {
+  --color-background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  --color-background-soft: rgba(255, 255, 255, 0.35);
+  --color-background-mute: rgba(255, 255, 255, 0.2);
+  --color-text: #2c3e50;
+  --color-border: rgba(255, 255, 255, 0.4);
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   font-weight: normal;
+}
+
+html, body {
   overflow: hidden; /* 全局禁用滚动条 */
+  height: 100%;
+  width: 100%;
 }
 
 ul {
@@ -43,6 +56,7 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
+  background-attachment: fixed; /* 确保渐变背景不随内容滚动 */
   line-height: 1.6;
   font-family:
     Inter,

@@ -1,34 +1,37 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { computed } from 'vue'
 
-const motto = ref('加载中...')
-let mottoTimer = null
-
-const fetchMotto = async () => {
-  try {
-    if (!window.api || !window.api.getMotto) {
-      motto.value = 'API 接口未就绪'
-      return
-    }
-    const data = await window.api.getMotto()
-    if (data && data.text) {
-      motto.value = data.text
-    } else {
-      motto.value = '凡是过往，皆为序章。'
-    }
-  } catch (e) {
-    console.error('Fetch motto failed:', e)
-    motto.value = '山有扶苏，隰有荷华。'
+const props = defineProps({
+  checkInDates: {
+    type: Array,
+    default: () => []
+  },
+  pendingCount: {
+    type: Number,
+    default: 0
+  },
+  completedCount: {
+    type: Number,
+    default: 0
+  },
+  maxStreak: {
+    type: Number,
+    default: 0
   }
-}
-
-onMounted(() => {
-  fetchMotto()
-  mottoTimer = setInterval(fetchMotto, 3 * 60 * 1000) // 3 minutes
 })
 
-onUnmounted(() => {
-  if (mottoTimer) clearInterval(mottoTimer)
+// 计算统计数据
+const stats = computed(() => {
+  // 计算完成率：已完成 / (已完成 + 待办)
+  const total = props.completedCount + props.pendingCount
+  const completionRate = total > 0 ? Math.round((props.completedCount / total) * 100) : 0
+  
+  return {
+    pending: props.pendingCount,
+    completed: props.completedCount,
+    rate: completionRate,
+    maxStreak: props.maxStreak
+  }
 })
 </script>
 
@@ -39,19 +42,36 @@ onUnmounted(() => {
         <span class="dot red"></span>
         <span class="dot yellow"></span>
         <span class="dot green"></span>
-      </div> 
-      <div class="card-title">一言</div>
+      </div>
+      <div class="card-title">概览</div>
     </div>
     <div class="card-content">
-      <p class="motto-text">{{ motto }}</p>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">待办事件</span>
+          <span class="stat-value">{{ stats.pending }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">已完成</span>
+          <span class="stat-value">{{ stats.completed }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">完成率</span>
+          <span class="stat-value">{{ stats.rate }}%</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">最大连续打卡</span>
+          <span class="stat-value">{{ stats.maxStreak }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* macOS 风格卡片 */
+/* 复用 macOS 风格卡片样式 */
 .macos-card {
-  width: 450px; /* 固定宽度 */
+  width: 100%; /* 宽度由父容器控制 */
   background-color: var(--color-background-soft);
   border-radius: 12px;
   border: 1px solid var(--color-border);
@@ -104,22 +124,36 @@ onUnmounted(() => {
 
 .card-content {
   padding: 24px;
-  min-height: 100px;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center; /* 确保多行文本也居中 */
-  flex: 1; /* 占据剩余高度 */
 }
 
-.motto-text {
-  font-size: 15px;
-  line-height: 1.8;
-  color: var(--color-text);
-  opacity: 0.9;
-  white-space: pre-wrap;
-  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--ev-c-text-2);
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
 }
 
 /* 深色模式适配 */

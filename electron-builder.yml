@@ -1,7 +1,7 @@
-appId: com.electron.app
-productName: 天工开物
+appId: com.electron.ticklo
+productName: Ticklo
 directories:
-  buildResources: build
+  buildResources: resources
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -12,8 +12,10 @@ asarUnpack:
   - resources/**
 win:
   executableName: ticklo
-  icon: build/icon.ico
+  icon: resources/icon.png
 nsis:
+  oneClick: false
+  perMachine: true
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
