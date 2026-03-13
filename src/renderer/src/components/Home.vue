@@ -82,22 +82,17 @@ const handleCheckIn = async () => {
             playSuccessSound()
           }
         }
-      } else {
-        console.error('Check-in result error:', result.error)
       }
     }
   } catch (e) {
-    console.error('Check-in failed:', e)
+    // console.error('Check-in failed:', e)
   }
 }
 
 // 简单的音效播放函数
 const playSuccessSound = () => {
   // 使用一个短促的提示音 base64
-  const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU') // 这里只是个占位，实际应该用真实的音频数据
-  // 由于没有真实的音频文件，我们用浏览器自带的 beep 替代方案或者仅仅是 log
-  console.log('Play sound!')
-  // 实际项目中可以引入一个真实的 mp3/wav 文件
+  const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU') 
 }
 
 const userProfile = ref({

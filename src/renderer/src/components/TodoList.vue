@@ -28,21 +28,18 @@ const fetchTodos = async () => {
       }
     }
   } catch (e) {
-    console.error('Fetch todos failed:', e)
+    // console.error('Fetch todos failed:', e)
   } finally {
     isLoading.value = false
   }
 }
 
 const handleAddTodo = async () => {
-  console.log('handleAddTodo called', newTodoTitle.value)
   if (!newTodoTitle.value.trim()) {
-    console.log('Title is empty')
     return
   }
   
   if (!userProfile.value) {
-    console.error('User profile not loaded yet')
     // 尝试重新获取
     await fetchUserProfile()
     if (!userProfile.value) {
@@ -53,24 +50,18 @@ const handleAddTodo = async () => {
   
   try {
     if (window.api && window.api.addTodo) {
-      console.log('Calling addTodo API')
       const result = await window.api.addTodo({
         userId: userProfile.value.id,
         title: newTodoTitle.value.trim()
       })
-      console.log('addTodo result:', result)
       
       if (result.success) {
         todos.value.unshift(result.todo)
         newTodoTitle.value = ''
-      } else {
-        console.error('Add todo failed:', result.error)
       }
-    } else {
-      console.error('addTodo API missing')
     }
   } catch (e) {
-    console.error('Add todo exception:', e)
+    // console.error('Add todo exception:', e)
   }
 }
 
@@ -114,7 +105,7 @@ const confirmComplete = async () => {
       }
     }
   } catch (e) {
-    console.error('Complete todo failed:', e)
+    // console.error('Complete todo failed:', e)
   }
 }
 
@@ -122,7 +113,6 @@ const confirmComplete = async () => {
 const playSuccessSound = () => {
   // 使用一个短促的提示音 base64
   const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU') 
-  console.log('Play sound!')
 }
 
 const cancelComplete = () => {

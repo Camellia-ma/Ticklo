@@ -30,17 +30,11 @@ const userProfile = ref({
 })
 
 const fetchProfile = async () => {
-  console.log('Fetching profile...')
   if (window.api && window.api.getUserProfile) {
     const result = await window.api.getUserProfile()
-    console.log('Fetch result:', result)
     if (result.success) {
       userProfile.value = { ...result.user }
-    } else {
-      console.error('Fetch profile failed:', result.error)
     }
-  } else {
-    console.error('getUserProfile API missing')
   }
 }
 
@@ -56,22 +50,16 @@ const handleAvatarChange = (event) => {
 }
 
 const saveProfile = async () => {
-  console.log('Save button clicked')
   isLoading.value = true
   try {
-    if (!window.api) {
-      alert('Error: window.api is undefined')
-      return
-    }
-    if (!window.api.updateUserProfile) {
-      alert('Error: updateUserProfile API is missing. Please restart the app.')
+    if (!window.api || !window.api.updateUserProfile) {
+      alert('Error: API is missing. Please restart the app.')
       return
     }
 
     // 检查是否有 userProfile.id
     if (!userProfile.value.id) {
       alert('无法保存：用户 ID 为空。请刷新页面重试。')
-      console.error('User ID is missing in profile:', userProfile.value)
       return
     }
 
@@ -81,23 +69,15 @@ const saveProfile = async () => {
       avatar_base64: userProfile.value.avatar_base64 || ''
     }
     
-    console.log('Saving profile:', profileToSave)
     const result = await window.api.updateUserProfile(profileToSave)
-    console.log('Save result:', result)
     
     if (result.success) {
       userProfile.value = { ...result.user }
       showForm.value = false
-      // 移除 alert('保存成功！')
-      // 移除 window.location.reload()，避免强制刷新导致主题和路由重置
-      // 如果需要通知其他组件更新，可以使用 EventBus 或简单的 props/emit 机制
-      // 这里由于 Settings 和 Home 是互斥的路由视图，再次进入 Home 时会重新 fetch 数据
     } else {
-      console.error('Update failed:', result.error)
       alert('保存失败: ' + result.error)
     }
   } catch (e) {
-    console.error('Save profile failed:', e)
     alert('保存出错: ' + e.message)
   } finally {
     isLoading.value = false

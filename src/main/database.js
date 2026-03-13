@@ -127,3 +127,15 @@ export function getDB() {
   }
   return db
 }
+
+export function closeDB() {
+  if (db) {
+    try {
+      db.close()
+      db = null
+      console.log('Database connection closed.')
+    } catch (error) {
+      console.error('Failed to close database:', error)
+    }
+  }
+}
